@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>채팅 서비스</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+    <!-- 부가적인 테마 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+    <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+
+</head>
+<body>
+<div class="container">
+
+<!--    <input type="text" id="nickname" class="form-inline" placeholder="닉네임을 입력해주세요" required autofocus>-->
+<!--    <button class="btn btn-primary" id="name">확인</button>-->
+    <div>
+        <h1>채팅방</h1>
+    </div>
+<!--    인풋 엔터로도 되게 바꾸기-->
+    <div id="chatroom" class="card-body" style="width: 30em;height: 40em; background-color: #a4a2a8; border: rgba(0,95,8,0.69); overflow:auto"></div>
+
+    <input type="text" id="message" style="height : 30px; width : 340px" placeholder="내용을 입력하세요" autofocus>
+    <button class="btn btn-primary" id="send">전송</button>
+</div>
+
+
+
+</body>
+<script>
+
+    var webSocket;
+    var nickname= prompt('닉네임을 입력해주세요');
+    connect();
+    // document.getElementById("name").addEventListener("click", function () {
+    //     nickname = document.getElementById("nickname").value;
+    //     document.getElementById("nickname").style.display = "none";
+    //     document.getElementById("name").style.display = "none";
+    //     connect();
+    // })
+    document.getElementById("send").addEventListener("click", function () {
+        send();
+    })
+
+    function connect() {
+        webSocket = new WebSocket("ws://localhost:8080/chat");
+        webSocket.onopen = onOpen;
+        webSocket.onclose = onClose;
+        webSocket.onmessage = onMessage;
+    }
+
+    function disconnect() {
+        webSocket.send(nickname + "님이 퇴장하셨습니다");
+        webSocket.close();
+    }
+
+    function send() {
+        msg = document.getElementById("message").value;
+        webSocket.send(nickname + " : " + msg);
+        document.getElementById("message").value = "";
+    }
+
+    function onOpen() {
+        webSocket.send(nickname + "님이 입장하셨습니다.");
+    }
+
+    function onMessage(e) {
+        data = e.data;
+        chatroom = document.getElementById("chatroom");
+        chatroom.innerHTML = chatroom.innerHTML + "<br>" + data;
+        chatroom.scrollBy(0, 500);
+
+        // $("#chatroom").innerHTML += "<br>" + data;
+        // var str = "<b>" + data + "</b>";
+        // $("#chatroom").append("<br>" + data);
+    }
+
+    function onClose() {
+
+    }
+</script>
+</html>
