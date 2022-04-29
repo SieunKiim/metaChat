@@ -8,8 +8,7 @@ import org.springframework.web.socket.config.annotation.*;
 
 
 @Configuration
-@RequiredArgsConstructor
-@EnableWebSocket // 웹 소켓 활성화
+@EnableWebSocketMessageBroker // 웹 소켓 활성화
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
 //    private final WebSocketHandler chatHandler;
