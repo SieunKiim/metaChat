@@ -10,19 +10,25 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 @Slf4j
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class WebChatController {
 
-    private final SimpMessagingTemplate template;
-
-    @MessageMapping(value = "/chat/enter")
-    public void enter(ChatMessageDTO message) {
-        message.setMessage(message.getWriter() + "님이 채팅방에 입장");
-        template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
+    @GetMapping("/")
+    public String chatGET() {
+        log.info("chatGET() 실행");
+        return "chat";
     }
 
-    @MessageMapping(value = "/chat/message")
-    public void message(ChatMessageDTO message) {
-        template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
-    }
+//    private final SimpMessagingTemplate template;
+
+//    @MessageMapping(value = "/chat/enter")
+//    public void enter(ChatMessageDTO message) {
+//        message.setMessage(message.getWriter() + "님이 채팅방에 입장");
+//        template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
+//    }
+//
+//    @MessageMapping(value = "/chat/message")
+//    public void message(ChatMessageDTO message) {
+//        template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
+//    }
 }

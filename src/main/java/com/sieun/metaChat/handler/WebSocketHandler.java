@@ -13,7 +13,7 @@ import java.util.List;
 
 @Component
 @Slf4j
-public class WebSocketHandler extends TextWebSocketHandler {
+public class WebSocketHandler extends TextWebSocketHandler { //chatHandler -> 교재에선
 
     private static List<WebSocketSession> list = new ArrayList<>();
 

@@ -15,7 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(value = "/chat")
+//@RequestMapping(value = "/chat")
 @Slf4j
 public class RoomController {
     private final ChatRoomRepository repository;
