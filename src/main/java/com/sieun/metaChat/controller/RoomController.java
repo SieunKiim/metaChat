@@ -15,21 +15,24 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
-//@RequestMapping(value = "/chat")
+@RequestMapping(value = "/chat")
 @Slf4j
 public class RoomController {
+
     private final ChatRoomRepository repository;
 
-    @GetMapping(value = "/rooms")
+    //채팅방 목록 조회
+    @GetMapping( "/rooms")
     public ModelAndView rooms() {
         log.info("# ALL Chat Rooms");
-        ModelAndView mv = new ModelAndView("chat/rooms");
+        ModelAndView mv = new ModelAndView("/chat/roomList");
 
         mv.addObject("list", repository.findAllRooms());
 
         return mv;
     }
 
+    //채팅방 개설
     @PostMapping(value = "/room")
     public String create(@RequestParam String name, RedirectAttributes rttr) {
         log.info("#Create chat Room, name : " + name);
@@ -37,6 +40,7 @@ public class RoomController {
         return "redirect:/chat/rooms";
     }
 
+    //채팅방 조회
     @GetMapping("/room")
     public void getRoom(String roomId, Model model) {
         log.info("# Get Chat Room, roomID : " + roomId);

@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 //@RequiredArgsConstructor
 public class WebChatController {
 
-    @GetMapping("/")
-    public String chatGET() {
-        log.info("chatGET() 실행");
-        return "chat";
-    }
+//    @GetMapping("/")
+//    public String chatGET() {
+//        log.info("chatGET() 실행");
+//        return "chat";
+//    }
 
 //    private final SimpMessagingTemplate template;
 

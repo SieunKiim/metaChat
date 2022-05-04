@@ -2,7 +2,6 @@ package com.sieun.metaChat.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.util.HashSet;
