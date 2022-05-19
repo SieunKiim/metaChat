@@ -1,37 +1,38 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link rel="shortcut icon" href="#">
     <title>chat room</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
 <body>
 <div class="container">
     <div>
-        <h1>[[${room.name]]</h1>
+        <h1>[[${room.name}]]</h1>
     </div>
     <div id="chatroom" class="card-body" style="width: 30em;height: 40em; background-color: #a4a2a8; border: rgba(0,95,8,0.69); overflow:auto"></div>
 
     <div class="py-2">
-        <input type="text" id="message" style="height : 30px; width : 30em" placeholder="내용을 입력하세요" autofocus onkeydown="if(event.keyCode == 13) send();">
+        <input type="text" id="message_input" style="height : 30px; width : 30em" placeholder="내용을 입력하세요" autofocus>
     </div>
 </div>
 </body>
 <script th:inline="javascript">
     $(document).ready(function(){
-
+        const nickname = prompt('닉네임을 입력해주세요');
         var roomName = [[${room.name}]];
         var roomId = [[${room.roomId}]];
-        var username = [[${#authentication.principal.username}]]; // 프롬프트로 수정하기
+        var username = nickname; // 프롬프트로 사용자 이름 입
 
-        console.log(roomName + ", " + roomId + ", " + username);
+        //console.log(roomName + ", " + roomId + ", " + username);
 
-        var websocket = new WebSocket("/university"); //endpoint 설정
+        const websocket = new SockJS("/university"); //endpoint 설정
         //1. SockJS를 내부에 들고있는 stomp를 내어줌
-        var stomp = Stomp.over(websocket);
+        const stomp = Stomp.over(websocket);
 
         //2. connection이 맺어지면 실행
         stomp.connect({}, function (){
@@ -39,39 +40,43 @@
 
             //4. subscribe(path, callback)으로 메세지를 받을 수 있음
             stomp.subscribe("/sub/chat/room/" + roomId, function (chat) { //subscribe의 두번쨰 인자는 메시지를 수신 받았을 때를 처리
+                //console.log("subscribe 작동")
+                console.log(chat)
                 var content = JSON.parse(chat.body);
-
                 var writer = content.writer;
-                var str = '';
+                var text_message = content.message;
+                // var str = '';
+                const chatroom = document.getElementById("chatroom");
 
                 if(writer === username){
-                    str = "<div class='col-6'>";
-                    str += "<div class='alert alert-secondary'>";
-                    str += "<b>" + writer + " : " + message + "</b>";
-                    str += "</div></div>";
-                    $("#msgArea").append(str);
+                    // console.log("내가 씀");
+                    // const chatroom = document.getElementById("chatroom");
+                    chatroom.innerHTML = chatroom.innerHTML + "<p style=\"text-align:right;\">" + text_message + "</p>"; // 내가 친 챗은 오른쪽에 나오도록
+                    // chatroom.scrollBy(0, 500);
                 }
                 else{
-                    str = "<div class='col-6'>";
-                    str += "<div class='alert alert-warning'>";
-                    str += "<b>" + writer + " : " + message + "</b>";
-                    str += "</div></div>";
-                    $("#msgArea").append(str);
+                    // console.log("다른 방에서 씀")
+                    // const chatroom = document.getElementById("chatroom");
+                    chatroom.innerHTML = chatroom.innerHTML + "<p>" + text_message + "</p>";
+                    // chatroom.scrollBy(0, 500);
                 }
+                chatroom.scrollBy(0, 500);
 
-                $("#msgArea").append(str);
             });
-
             //3. send(path, header, message)로 메세지를 보낼 수 있음
-            stomp.send('/pub/chat/enter', {}, JSON.stringify({roomId: roomId, writer: username}))
+            stomp.send('/pub/chat/enter', {}, JSON.stringify({'roomId': roomId, 'writer': username}))
+
         });
 
-        $("#button-send").on("click", function(e){
-            var msg = document.getElementById("msg");
+        $("#message_input").keydown(function(e){ // 왜 keyup을 하면 중복입력되는거지?
+            if (e.keyCode == 13) {
 
-            console.log(username + ":" + msg.value);
-            stomp.send('/pub/chat/message', {}, JSON.stringify({roomId: roomId, message: msg.value, writer: username}));
-            msg.value = '';
+                const msg = document.getElementById("message_input");
+
+                // console.log("[log]" + username + ":" + msg.value);
+                stomp.send('/pub/chat/message', {}, JSON.stringify({'roomId': roomId, 'writer': username, 'message': msg.value}));
+                msg.value = "";
+            }
         });
     });
 </script>
