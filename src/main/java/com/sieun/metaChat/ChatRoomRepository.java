@@ -13,6 +13,14 @@ public class ChatRoomRepository {
     @PostConstruct
     private void init() {
         chatRoomDTOMap = new LinkedHashMap<>();
+        createChatRoomDTO("공학관");
+        createChatRoomDTO("교양관");
+        createChatRoomDTO("기숙사");
+        createChatRoomDTO("도서관");
+        createChatRoomDTO("백년관");
+        createChatRoomDTO("어문관");
+        createChatRoomDTO("인경관");
+        createChatRoomDTO("후생관");
     }
 
     public List<ChatRoomDTO> findAllRooms() {
