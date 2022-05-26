@@ -1,0 +1,59 @@
+#container {
+    position: relative;
+}
+
+#공학관 {
+    position: absolute;
+    width: 120px;
+    top: 34vw;
+    left: 23vw;
+}
+
+#교양관 {
+    position: absolute;
+    width: 120px;
+    top: 24vw;
+    left: 78vw;
+}
+
+#기숙사 {
+    position: absolute;
+    width: 120px;
+    top: 56vw;
+    left: 20vw;
+}
+
+#도서관 {
+    position: absolute;
+    width: 140px;
+    top: 53vw;
+    left: 41vw;
+}
+
+#백년관 {
+    position: absolute;
+    width: 120px;
+    top: 38vw;
+    left: 10vw;
+}
+
+#어문관 {
+    position: absolute;
+    width: 120px;
+    top: 45vw;
+    left: 65vw;
+}
+
+#인경관 {
+    position: absolute;
+    width: 120px;
+    top: 43vw;
+    left: 81vw;
+}
+
+#후생관 {
+    position: absolute;
+    width: 120px;
+    top: 29vw;
+    left: 36vw;
+}

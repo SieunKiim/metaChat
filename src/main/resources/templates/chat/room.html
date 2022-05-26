@@ -26,8 +26,12 @@
         const nickname = prompt('닉네임을 입력해주세요');
         var roomName = [[${room.name}]];
         var roomId = [[${room.roomId}]];
-        var username = nickname; // 프롬프트로 사용자 이름 입
-
+        var username = nickname; // 프롬프트로 사용자 이름 입력
+        let roomLatitude = [[${room.roomLatitude}]];
+        let roomLongitude = [[${room.roomLongitude}]];
+        let chatLatitude = 0;
+        let chatLongitude = 0;
+        console.log("room location",roomLatitude, roomLongitude)
         //console.log(roomName + ", " + roomId + ", " + username);
 
         const websocket = new SockJS("/university"); //endpoint 설정
@@ -38,46 +42,62 @@
         stomp.connect({}, function (){
             console.log("STOMP Connection")
 
-            //4. subscribe(path, callback)으로 메세지를 받을 수 있음
+            // 4. subscribe(path, callback)으로 메세지를 받을 수 있음
             stomp.subscribe("/sub/chat/room/" + roomId, function (chat) { //subscribe의 두번쨰 인자는 메시지를 수신 받았을 때를 처리
                 //console.log("subscribe 작동")
-                console.log(chat)
                 var content = JSON.parse(chat.body);
                 var writer = content.writer;
                 var text_message = content.message;
+                chatLatitude = content.chatLatitude;
+                chatLongitude = content.chatLongitude;
                 // var str = '';
+                console.log(content)
                 const chatroom = document.getElementById("chatroom");
-
                 if(writer === username){
-                    // console.log("내가 씀");
-                    // const chatroom = document.getElementById("chatroom");
+                    console.log(chatLatitude, chatLongitude);
                     chatroom.innerHTML = chatroom.innerHTML + "<p style=\"text-align:right;\">" + text_message + "</p>"; // 내가 친 챗은 오른쪽에 나오도록
-                    // chatroom.scrollBy(0, 500);
                 }
                 else{
-                    // console.log("다른 방에서 씀")
-                    // const chatroom = document.getElementById("chatroom");
+                    console.log(chatLatitude, chatLongitude);
                     chatroom.innerHTML = chatroom.innerHTML + "<p>" + text_message + "</p>";
-                    // chatroom.scrollBy(0, 500);
                 }
                 chatroom.scrollBy(0, 500);
 
             });
             //3. send(path, header, message)로 메세지를 보낼 수 있음
-            stomp.send('/pub/chat/enter', {}, JSON.stringify({'roomId': roomId, 'writer': username}))
+            getChatLocation();
+            stomp.send('/pub/chat/enter', {}, JSON.stringify({'roomId': roomId, 'writer': username, 'chatLatitude' : -1, 'chatLongitude' : -1}))
 
         });
 
-        $("#message_input").keydown(function(e){ // 왜 keyup을 하면 중복입력되는거지?
+        $("#message_input").keydown(function(e){
             if (e.keyCode == 13) {
-
+                getChatLocation();
                 const msg = document.getElementById("message_input");
-
                 // console.log("[log]" + username + ":" + msg.value);
-                stomp.send('/pub/chat/message', {}, JSON.stringify({'roomId': roomId, 'writer': username, 'message': msg.value}));
+                stomp.send('/pub/chat/message', {}, JSON.stringify({'roomId': roomId, 'writer': username, 'message': msg.value,  'chatLatitude' : chatLatitude, 'chatLongitude' : chatLongitude}));
                 msg.value = "";
             }
         });
+
+        function getChatLocation() {
+            if (navigator.geolocation) { // GPS 지원한다면
+                navigator.geolocation.getCurrentPosition(function (location) {
+                    // 위치 정보 가져오기를 성공하면
+                    console.log("사용자 위치 갱신");
+                    chatLatitude = location.coords.latitude;
+                    chatLongitude = location.coords.longitude;
+                }, function (error) {
+                    console.error("위치 정보를 가져오지 못했습니다.")
+                },{
+                    enableHighAccuracy: false,
+                    maximumAge: 0,
+                    timeout: Infinity
+                });
+            } else {
+                alert("GPS를 지원하지 않습니다.")
+            }
+        }
     });
 </script>
 </html>

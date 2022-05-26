@@ -36,7 +36,7 @@ public class RoomController {
     @PostMapping(value = "/room")
     public String create(@RequestParam String name, RedirectAttributes rttr) {
         log.info("#Create chat Room, name : " + name);
-        rttr.addFlashAttribute("roomName", repository.createChatRoomDTO(name));
+        rttr.addFlashAttribute("roomName", repository.createChatRoomDTO(name, 0, 0)); // 위도 경도 일당 0,0으로
         return "redirect:/chat/rooms";
     }
 
