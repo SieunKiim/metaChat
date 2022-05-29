@@ -42,8 +42,9 @@ public class RoomController {
 
     //채팅방 조회
     @GetMapping("/room")
-    public void getRoom(String roomId, Model model) {
+    public String getRoom(String roomId, Model model) {
         log.info("# Get Chat Room, roomID : " + roomId);
         model.addAttribute("room", repository.findRoomById(roomId));
+        return "chat/room";
     }
 }
