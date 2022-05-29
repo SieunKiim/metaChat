@@ -22,7 +22,7 @@ public class StompChatController {
 
     @MessageMapping("/chat/message")
     public void message(ChatMessageDTO message) {
-        message.setMessage(message.getWriter() + " : " + message.getMessage());
+        message.setMessage(message.getMessage());
         template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
     }
 }

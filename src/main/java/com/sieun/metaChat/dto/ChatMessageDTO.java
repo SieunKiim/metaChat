@@ -9,6 +9,6 @@ public class ChatMessageDTO {
     private String roomId;
     private String writer;
     private String message;
-    private double chatLatitude = 0;
-    private double chatLongitude = 0;
+    private double chatLatitude;
+    private double chatLongitude;
 }

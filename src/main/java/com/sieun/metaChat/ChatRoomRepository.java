@@ -15,7 +15,7 @@ public class ChatRoomRepository {
         chatRoomDTOMap = new LinkedHashMap<>();
         createChatRoomDTO("공학관", 37.337566, 127.267790);
         createChatRoomDTO("교양관", 37.339796, 127.272037);
-        createChatRoomDTO("기숙사", 37.334856, 127.263103);
+        createChatRoomDTO("기숙사", 37.595411, 127.059305); // 기숙사 위도 좌표 : 37.334856, 127.263103
         createChatRoomDTO("도서관", 37.336612, 127.268472);
         createChatRoomDTO("백년관", 37.337301, 127.265805);
         createChatRoomDTO("어문관", 37.338213, 127.273026);

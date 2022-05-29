@@ -31,6 +31,8 @@
         let roomLongitude = [[${room.roomLongitude}]];
         let chatLatitude = 0;
         let chatLongitude = 0;
+        const inBuilding = 45;
+        getChatLocation()
         console.log("room location",roomLatitude, roomLongitude)
         //console.log(roomName + ", " + roomId + ", " + username);
 
@@ -48,25 +50,41 @@
                 var content = JSON.parse(chat.body);
                 var writer = content.writer;
                 var text_message = content.message;
-                chatLatitude = content.chatLatitude;
-                chatLongitude = content.chatLongitude;
+                let chatLatitude = content.chatLatitude;
+                let chatLongitude = content.chatLongitude;
                 // var str = '';
                 console.log(content)
+
+                let distance = getDistance(chatLatitude, chatLongitude, roomLatitude, roomLongitude);
+                console.log("거리: ", distance);
+                console.log("사용자 : ", chatLatitude, chatLongitude);
+                console.log("건 물 :", roomLatitude, roomLongitude)
                 const chatroom = document.getElementById("chatroom");
-                if(writer === username){
-                    console.log(chatLatitude, chatLongitude);
-                    chatroom.innerHTML = chatroom.innerHTML + "<p style=\"text-align:right;\">" + text_message + "</p>"; // 내가 친 챗은 오른쪽에 나오도록
-                }
-                else{
-                    console.log(chatLatitude, chatLongitude);
-                    chatroom.innerHTML = chatroom.innerHTML + "<p>" + text_message + "</p>";
+                if (text_message == writer + "님이 채팅방에 입장하였습니다.") {
+                    console.log("입장문");
+                    chatroom.innerHTML = chatroom.innerHTML + "<p style=\"text-align:center;\">" + "[" +text_message + "]" + "</p>"; // 입장 메시지는 가운데로
+
+                } else {
+                    if (writer === username){
+                        // console.log(chatLatitude, chatLongitude);
+                        chatroom.innerHTML = chatroom.innerHTML + "<p style=\"text-align:right;\">" + text_message + "</p>"; // 내가 친 챗은 오른쪽에 나오도록
+                    }
+                    else{
+                        // console.log(chatLatitude, chatLongitude);
+                        if (distance <= inBuilding) {
+                            chatroom.innerHTML = chatroom.innerHTML + "<p>" + writer + " : " + text_message + "</p>";
+                        } else {
+                            chatroom.innerHTML = chatroom.innerHTML + "<p>" + '&#x1F607'+ " " + writer + " : " + text_message + "</p>";
+                        }
+                    }
                 }
                 chatroom.scrollBy(0, 500);
 
+
             });
             //3. send(path, header, message)로 메세지를 보낼 수 있음
-            getChatLocation();
-            stomp.send('/pub/chat/enter', {}, JSON.stringify({'roomId': roomId, 'writer': username, 'chatLatitude' : -1, 'chatLongitude' : -1}))
+            // getChatLocation();
+            stomp.send('/pub/chat/enter', {}, JSON.stringify({'roomId': roomId, 'writer': username, 'chatLatitude' : chatLatitude, 'chatLongitude' : chatLongitude}))
 
         });
 
@@ -75,8 +93,12 @@
                 getChatLocation();
                 const msg = document.getElementById("message_input");
                 // console.log("[log]" + username + ":" + msg.value);
-                stomp.send('/pub/chat/message', {}, JSON.stringify({'roomId': roomId, 'writer': username, 'message': msg.value,  'chatLatitude' : chatLatitude, 'chatLongitude' : chatLongitude}));
-                msg.value = "";
+                if (msg.value == "") {
+                    alert("내용을 입력하세요");
+                } else {
+                    stomp.send('/pub/chat/message', {}, JSON.stringify({'roomId': roomId, 'writer': username, 'message': msg.value,  'chatLatitude' : chatLatitude, 'chatLongitude' : chatLongitude}));
+                    msg.value = "";
+                }
             }
         });
 
@@ -97,6 +119,26 @@
             } else {
                 alert("GPS를 지원하지 않습니다.")
             }
+        }
+        function getDistance(lat1, lon1, lat2, lon2) { // meter 값으로 반환
+            if ((lat1 == lat2) && (lon1 == lon2))
+                return 0;
+
+            var radLat1 = Math.PI * lat1 / 180;
+            var radLat2 = Math.PI * lat2 / 180;
+            var theta = lon1 - lon2;
+            var radTheta = Math.PI * theta / 180;
+            var dist = Math.sin(radLat1) * Math.sin(radLat2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.cos(radTheta);
+            if (dist > 1)
+                dist = 1;
+
+            dist = Math.acos(dist);
+            dist = dist * 180 / Math.PI;
+            dist = dist * 60 * 1.1515 * 1.609344 * 1000;
+            // if (dist < 100) dist = Math.round(dist / 10) * 10;
+            // else dist = Math.round(dist / 100) * 100;
+            dist = Math.round(dist)
+            return dist;
         }
     });
 </script>
