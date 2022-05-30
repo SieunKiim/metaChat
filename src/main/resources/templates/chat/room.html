@@ -23,6 +23,7 @@
 </body>
 <script th:inline="javascript">
     $(document).ready(function(){
+        let start = new Date();
         const nickname = prompt('닉네임을 입력해주세요');
         var roomName = [[${room.name}]];
         var roomId = [[${room.roomId}]];
@@ -32,7 +33,7 @@
         let chatLatitude = 0;
         let chatLongitude = 0;
         const inBuilding = 45;
-        getChatLocation()
+        // getChatLocation()
         console.log("room location",roomLatitude, roomLongitude)
         //console.log(roomName + ", " + roomId + ", " + username);
 
@@ -83,7 +84,7 @@
 
             });
             //3. send(path, header, message)로 메세지를 보낼 수 있음
-            // getChatLocation();
+            getChatLocation();
             stomp.send('/pub/chat/enter', {}, JSON.stringify({'roomId': roomId, 'writer': username, 'chatLatitude' : chatLatitude, 'chatLongitude' : chatLongitude}))
 
         });
@@ -96,7 +97,11 @@
                 if (msg.value == "") {
                     alert("내용을 입력하세요");
                 } else {
-                    stomp.send('/pub/chat/message', {}, JSON.stringify({'roomId': roomId, 'writer': username, 'message': msg.value,  'chatLatitude' : chatLatitude, 'chatLongitude' : chatLongitude}));
+                    stomp.send('/pub/chat/message', {}, JSON.stringify({
+                        'roomId': roomId, 'writer': username,
+                        'message': msg.value,  'chatLatitude' : chatLatitude,
+                        'chatLongitude' : chatLongitude
+                    }));
                     msg.value = "";
                 }
             }
@@ -109,6 +114,9 @@
                     console.log("사용자 위치 갱신");
                     chatLatitude = location.coords.latitude;
                     chatLongitude = location.coords.longitude;
+                    let temp = new Date();
+                    console.log(start - temp)
+                    start = temp
                 }, function (error) {
                     console.error("위치 정보를 가져오지 못했습니다.")
                 },{
@@ -128,7 +136,8 @@
             var radLat2 = Math.PI * lat2 / 180;
             var theta = lon1 - lon2;
             var radTheta = Math.PI * theta / 180;
-            var dist = Math.sin(radLat1) * Math.sin(radLat2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.cos(radTheta);
+            var dist = Math.sin(radLat1) * Math.sin(radLat2)
+                + Math.cos(radLat1) * Math.cos(radLat2) * Math.cos(radTheta);
             if (dist > 1)
                 dist = 1;
 

@@ -20,15 +20,20 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class RoomController {
 
     private final ChatRoomRepository repository;
-
     //채팅방 목록 조회
+
     @GetMapping( "/rooms")
     public ModelAndView rooms() {
+        long startTime = System.currentTimeMillis();
+
         log.info("# ALL Chat Rooms");
         ModelAndView mv = new ModelAndView("/chat/roomList");
 
         mv.addObject("list", repository.findAllRooms());
 
+        long stopTime = System.currentTimeMillis();
+        long elapsedTime = stopTime - startTime;
+        log.info(String.valueOf(elapsedTime));
         return mv;
     }
 
