@@ -20,6 +20,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 	implementation 'org.projectlombok:lombok:1.18.20'
+//	compile('org.projectlombok:lombok')
+	annotationProcessor('org.projectlombok:lombok')
 	implementation 'org.jetbrains:annotations:20.1.0'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
