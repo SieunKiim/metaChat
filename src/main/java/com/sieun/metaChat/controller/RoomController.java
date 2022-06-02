@@ -27,7 +27,7 @@ public class RoomController {
         long startTime = System.currentTimeMillis();
 
         log.info("# ALL Chat Rooms");
-        ModelAndView mv = new ModelAndView("/chat/roomList");
+        ModelAndView mv = new ModelAndView("roomList");
 
         mv.addObject("list", repository.findAllRooms());
 
@@ -50,6 +50,6 @@ public class RoomController {
     public String getRoom(String roomId, Model model) {
         log.info("# Get Chat Room, roomID : " + roomId);
         model.addAttribute("room", repository.findRoomById(roomId));
-        return "chat/room";
+        return "room";
     }
 }
