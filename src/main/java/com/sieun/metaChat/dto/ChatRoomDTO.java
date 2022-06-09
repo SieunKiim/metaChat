@@ -16,7 +16,7 @@ public class ChatRoomDTO {
     private String name;
     private double roomLatitude;
     private double roomLongitude;
-    private Set<WebSocketSession> session = new HashSet<>();
+//    private Set<WebSocketSession> session = new HashSet<>();
 
     public static ChatRoomDTO create(String name, double roomLatitude, double roomLongitude) {
         ChatRoomDTO room = new ChatRoomDTO();
