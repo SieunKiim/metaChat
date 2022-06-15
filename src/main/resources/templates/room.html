@@ -61,7 +61,7 @@
                 console.log("사용자 : ", chatLatitude, chatLongitude);
                 console.log("건 물 :", roomLatitude, roomLongitude)
                 const chatroom = document.getElementById("chatroom");
-                if (text_message == writer + "님이 채팅방에 입장하였습니다.") {
+                if (text_message === writer + "님이 채팅방에 입장하였습니다.") {
                     console.log("입장문");
                     chatroom.innerHTML = chatroom.innerHTML + "<p style=\"text-align:center;\">" + "[" +text_message + "]" + "</p>"; // 입장 메시지는 가운데로
 
@@ -79,7 +79,7 @@
                         }
                     }
                 }
-                chatroom.scrollBy(0, 500);
+                chatroom.scrollBy(0, 500); // 채팅이 쌓이면 아래로 묻혀서 안보임 -> 보낼 때 마다 자동 스크롤로 갱신
 
 
             });
@@ -129,7 +129,7 @@
             }
         }
         function getDistance(lat1, lon1, lat2, lon2) { // meter 값으로 반환
-            if ((lat1 == lat2) && (lon1 == lon2))
+            if ((lat1 === lat2) && (lon1 === lon2))
                 return 0;
 
             var radLat1 = Math.PI * lat1 / 180;
