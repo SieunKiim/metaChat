@@ -136,8 +136,7 @@
             var radLat2 = Math.PI * lat2 / 180;
             var theta = lon1 - lon2;
             var radTheta = Math.PI * theta / 180;
-            var dist = Math.sin(radLat1) * Math.sin(radLat2)
-                + Math.cos(radLat1) * Math.cos(radLat2) * Math.cos(radTheta);
+            var dist = Math.sin(radLat1) * Math.sin(radLat2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.cos(radTheta);
             if (dist > 1)
                 dist = 1;
 
