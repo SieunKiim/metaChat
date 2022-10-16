@@ -2,58 +2,58 @@
     position: relative;
 }
 
-#공학관 {
+#gonghack {
     position: absolute;
-    width: 120px;
-    top: 34vw;
-    left: 23vw;
+    width: 160px;
+    top: 8vw;
+    left: 34vw;
 }
 
-#교양관 {
+#gyoyang {
     position: absolute;
-    width: 120px;
-    top: 24vw;
-    left: 78vw;
+    width: 160px;
+    top: 3vw;
+    left: 67vw;
 }
 
-#기숙사 {
+#gisook {
     position: absolute;
-    width: 120px;
-    top: 56vw;
-    left: 20vw;
+    width: 160px;
+    top: 40vw;
+    left: 17vw;
 }
 
-#도서관 {
+#doseo {
     position: absolute;
-    width: 140px;
-    top: 53vw;
-    left: 41vw;
+    width: 160px;
+    top: 30vw;
+    left: 47vw;
 }
 
-#백년관 {
+#baecknyeon {
     position: absolute;
-    width: 120px;
-    top: 38vw;
-    left: 10vw;
+    width: 160px;
+    top: 21vw;
+    left: 25vw;
 }
 
-#어문관 {
+#auhmun {
     position: absolute;
-    width: 120px;
-    top: 45vw;
-    left: 65vw;
+    width: 160px;
+    top: 18vw;
+    left: 72vw;
 }
 
-#인경관 {
+#inkyeong {
     position: absolute;
-    width: 120px;
-    top: 43vw;
-    left: 81vw;
+    width: 160px;
+    top: 2vw;
+    left: 82vw;
 }
 
-#후생관 {
+#huseang {
     position: absolute;
-    width: 120px;
-    top: 29vw;
-    left: 36vw;
+    width: 160px;
+    top: 17vw;
+    left: 44vw;
 }

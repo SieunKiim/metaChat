@@ -1,55 +1,44 @@
 package com.sieun.metaChat.controller;
 
 
-import com.sieun.metaChat.ChatRoomRepository;
+import com.sieun.metaChat.dto.response.ResponseBuildingDto;
+import com.sieun.metaChat.entity.Building;
+import com.sieun.metaChat.service.BuildingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+@Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(value = "/chat")
-@Slf4j
+@RequestMapping(value = "/university/buildings")
 public class RoomController {
+    private final BuildingService buildingService;
 
-    private final ChatRoomRepository repository;
-    //채팅방 목록 조회
-
-    @GetMapping( "/rooms")
-    public ModelAndView rooms() {
-        long startTime = System.currentTimeMillis();
-
-        log.info("# ALL Chat Rooms");
+    @GetMapping
+    public ModelAndView getBuildings() {
+        List<Building> buildingList = buildingService.getBuildingList();
+        List<ResponseBuildingDto> responseBuildingDtoList = new ArrayList<>();
+        for (Building building : buildingList) {
+            responseBuildingDtoList.add(new ResponseBuildingDto(building.getId(), building.getBuildingName()));
+        }
         ModelAndView mv = new ModelAndView("roomList");
-
-        mv.addObject("list", repository.findAllRooms());
-
-        long stopTime = System.currentTimeMillis();
-        long elapsedTime = stopTime - startTime;
-        log.info(String.valueOf(elapsedTime));
+        mv.addObject("list", responseBuildingDtoList);
         return mv;
     }
 
-    //채팅방 개설
-    @PostMapping(value = "/room")
-    public String create(@RequestParam String name, RedirectAttributes rttr) {
-        log.info("#Create chat Room, name : " + name);
-        rttr.addFlashAttribute("roomName", repository.createChatRoomDTO(name, 0, 0)); // 위도 경도 일당 0,0으로
-        return "redirect:/chat/rooms";
-    }
 
-    //채팅방 조회
-    @GetMapping("/room")
-    public String getRoom(String roomId, Model model) { //@RequestParam 생략 가능
-        log.info("# Get Chat Room, roomID : " + roomId);
-        model.addAttribute("room", repository.findRoomById(roomId));
-        return "room";
+    @GetMapping( "/{buildingId}")
+    public ModelAndView enterBuilding(@PathVariable UUID buildingId) {
+        ResponseBuildingDto responseBuildingDto = buildingService.enterBuilding(buildingId);
+        ModelAndView mv = new ModelAndView("room");
+        mv.addObject("buildingId", responseBuildingDto);
+        return mv;
     }
 }

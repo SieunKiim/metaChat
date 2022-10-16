@@ -57,9 +57,11 @@
                 console.log(content)
 
                 let distance = getDistance(chatLatitude, chatLongitude, roomLatitude, roomLongitude);
-                console.log("거리: ", distance);
-                console.log("사용자 : ", chatLatitude, chatLongitude);
-                console.log("건 물 :", roomLatitude, roomLongitude)
+                let distance2 = getDistanceMine(chatLatitude, chatLongitude, roomLatitude, roomLongitude);
+                console.log("거리 : ", distance);
+                console.log("수정 전 거리 : ", distance2);
+                // console.log("사용자 : ", chatLatitude, chatLongitude);
+                // console.log("건 물 :", roomLatitude, roomLongitude)
                 const chatroom = document.getElementById("chatroom");
                 if (text_message === writer + "님이 채팅방에 입장하였습니다.") {
                     console.log("입장문");
@@ -90,11 +92,11 @@
         });
 
         $("#message_input").keydown(function(e){
-            if (e.keyCode == 13) {
+            if (e.keyCode === 13) {
                 getChatLocation();
                 const msg = document.getElementById("message_input");
                 // console.log("[log]" + username + ":" + msg.value);
-                if (msg.value == "") {
+                if (msg.value === "") {
                     alert("내용을 입력하세요");
                 } else {
                     stomp.send('/pub/chat/message', {}, JSON.stringify({
@@ -111,11 +113,11 @@
             if (navigator.geolocation) { // GPS 지원한다면
                 navigator.geolocation.getCurrentPosition(function (location) {
                     // 위치 정보 가져오기를 성공하면
-                    console.log("사용자 위치 갱신");
+                    // console.log("사용자 위치 갱신");
                     chatLatitude = location.coords.latitude;
                     chatLongitude = location.coords.longitude;
                     let temp = new Date();
-                    console.log(start - temp)
+                    // console.log(start - temp)
                     start = temp
                 }, function (error) {
                     console.error("위치 정보를 가져오지 못했습니다.")
@@ -143,10 +145,18 @@
             dist = Math.acos(dist);
             dist = dist * 180 / Math.PI;
             dist = dist * 60 * 1.1515 * 1.609344 * 1000;
-            // if (dist < 100) dist = Math.round(dist / 10) * 10;
-            // else dist = Math.round(dist / 100) * 100;
             dist = Math.round(dist)
+            // console.log("수정 후 : " + dist);
             return dist;
+        }
+
+        function getDistanceMine(lat1, lon1, lat2, lon2) {
+            var lenLat = 6371 * (Math.abs(lat1-lat2) * Math.PI/180);
+            var lenLong = 6371 * (Math.abs(lon1-lon2) * Math.PI/180);
+            var dist2 = Math.sqrt(Math.pow(lenLat, 2) + Math.pow(lenLong, 2));
+            dist2 = Math.round(dist2 * 1000);
+            return dist2;
+
         }
     });
 </script>

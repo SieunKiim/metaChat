@@ -12,7 +12,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <style th:inline="text">
         body{
-            background: url([[@{/images/지도.jpg}]]) no-repeat;
+            background: url([[@{/images/map.jpeg}]]) no-repeat;
             background-size: cover;
             /*no-repeat center center fixed;*/
         }
@@ -22,7 +22,7 @@
 <div class="container-fluid" id="container">
     <div>
         <ul th:each="room : ${list}">
-            <img th:id="${room.name}" th:src="@{/images/} + ${room.name} + '.jpeg'" th:onclick=" 'location.href=\'' + @{/chat/room(roomId=${room.roomId})} +'\''">
+            <img th:id="${room.name}" th:src="@{/images/} + ${room.name} + '.jpeg'" th:onclick=" 'location.href=\'' + @{/chat/room(buildingId=${room.buildingId})} +'\''">
         </ul>
     </div>
 </div>
