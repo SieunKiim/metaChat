@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>chat room</title>
+</head>
+<body>
+<div class="container">
+    <h1>[[${buildingInfo.name}]]</h1>
+</div>
+<div id="chatroom" class="card-body" style="width: 30em;height: 40em; background-color: #a4a2a8; border: rgba(0,95,8,0.69); overflow:auto"></div>
+<div class="py-2">
+    <input type="text" id="message_input" style="height : 30px; width : 30em" placeholder="내용을 입력하세요" autofocus>
+</div>
+</body>
+<script th:inline="javascript">
+    $(document).ready(function () {
+        const websocket = new SockJS("/university");
+        const stomp = Stomp.over(websocket);
+
+        stomp.subscribe("/sub/chat/room/" + ${builingInfo.buildingId}, function (chat){
+
+        })
+    });
+</script>
+</html>

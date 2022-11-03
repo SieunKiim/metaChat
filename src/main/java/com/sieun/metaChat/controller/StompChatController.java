@@ -11,8 +11,8 @@ import org.springframework.stereotype.Controller;
 @Controller
 @RequiredArgsConstructor
 public class StompChatController {
-    private final SimpMessagingTemplate template; // 특정 Broker로 메시지를 전달
 
+    private final SimpMessagingTemplate template; // 특정 Broker로 메시지를 전달
 
     @MessageMapping("/chat/enter")
     public void enter(RequestChatMessageDTO message) {

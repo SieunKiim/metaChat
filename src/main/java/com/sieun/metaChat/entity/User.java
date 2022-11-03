@@ -11,13 +11,13 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "userName", nullable = false)
     private String userName;
-
 
     public User(String userName) {
         this.userName = userName;

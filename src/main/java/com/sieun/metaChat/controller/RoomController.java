@@ -19,6 +19,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RequestMapping(value = "/university/buildings")
 public class RoomController {
+
     private final BuildingService buildingService;
 
     @GetMapping
@@ -33,12 +34,11 @@ public class RoomController {
         return mv;
     }
 
-
     @GetMapping( "/{buildingId}")
     public ModelAndView enterBuilding(@PathVariable UUID buildingId) {
         ResponseBuildingDto responseBuildingDto = buildingService.enterBuilding(buildingId);
-        ModelAndView mv = new ModelAndView("room");
-        mv.addObject("buildingId", responseBuildingDto);
+        ModelAndView mv = new ModelAndView("building");
+        mv.addObject("buildingInfo", responseBuildingDto);
         return mv;
     }
 }

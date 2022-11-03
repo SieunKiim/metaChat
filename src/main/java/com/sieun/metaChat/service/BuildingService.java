@@ -13,6 +13,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class BuildingService {
+
     private final BuildingRepository buildingRepository;
 
     public List<Building> getBuildingList() {
