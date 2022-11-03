@@ -6,7 +6,6 @@ plugins {
 
 group = 'com.sieun'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
 
 repositories {
 	mavenCentral()
@@ -18,9 +17,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 	implementation 'org.projectlombok:lombok:1.18.24'
-	implementation('org.projectlombok:lombok')
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor('org.projectlombok:lombok')
 	implementation 'org.jetbrains:annotations:23.0.0'

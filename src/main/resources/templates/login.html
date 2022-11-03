@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+</head>
+<body>
+<a th:href="@{https://kauth.kakao.com/oauth/authorize(client_id=${clientId},redirect_uri=${redirectUrl},response_type=code)}">
+    카카오 로그인 하러 가기
+</a>
+</body>
+</html>
