@@ -5,7 +5,7 @@ import lombok.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RequestChatMessageDTO {
+public class RequestChatMessageDto {
     private String roomId;
     private String writer;
     private double chatLatitude;
